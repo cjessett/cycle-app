@@ -1,0 +1,47 @@
+<nav class="navbar navbar-inverse" ng-controller='LapReportController' >
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" style="color:white;"><span style='font-size:8;'>BESSIES CREEK</span> <i class="fa fa-bicycle" aria-hidden="true"></i></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       <ul class="nav navbar-nav">
+            <li ng-hide="vm.isGuest()"><a href="#!/race">Races</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/participant">Participants</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/race_participant" >Race Participants</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/race_manager" class="active">Race Manager</a></li>
+             <li ng-hide="vm.isGuest()" class="active"><a href="#!/lap_report" class="active">Lap Report</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/race_results">Race Results</a></li>
+            <li ng-hide="!vm.isGuest()"><a href="#!/race_results_public">Race Results Public</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href=""><b>{{vm.user.firstName}}</b></a></li>
+        <li><a href="#!/login">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->a
+  </div><!-- /.container-fluid -->
+</nav>
+<h2>Lap Report</h2>
+
+
+  <div ng-controller="LapReportController">
+      
+        <table   cellspacing="2" cellpadding="2" class="table table-striped">
+            <tr><th align="center">Tag</th><th align="center">End Time</th><th align="center">Lap</th></tr>
+            <tr ng-repeat="rp in vm.laps">
+              <td>{{rp.tag}}</td>
+               <td>{{vm.toDate(rp.end_time) |  date:'ddMMMM HH:mm'}}</td>
+                <td>{{rp.lap_number}}</td>
+            </tr>
+        </table>
+        
+  </div>

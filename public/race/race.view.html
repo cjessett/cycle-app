@@ -1,0 +1,84 @@
+﻿<nav class="navbar navbar-inverse" ng-controller='RaceController' >
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" style="color:white;"><span style='font-size:8;'>BESSIES CREEK</span> <i class="fa fa-bicycle" aria-hidden="true"></i></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       <ul class="nav navbar-nav">
+        <li  ng-hide="vm.isGuest()" class="active"><a href="#!/race">Races</a></li>
+        <li  ng-hide="vm.isGuest()"><a href="#!/participant">Participants</a></li>
+        <li  ng-hide="vm.isGuest()"><a href="#!/race_participant">Race Participants</a></li>
+        <li  ng-hide="vm.isGuest()"><a href="#!/race_manager">Race Manager</a></li>
+        <li  ng-hide="vm.isGuest()" ><a href="#!/lap_report">Lap Report</a></li>
+        <li  ng-hide="vm.isGuest()"><a href="#!/race_results">Race Results</a></li>
+        <li  ng-hide="!vm.isGuest()"><a href="#!/race_results_public">Race Results Public</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href=""><b>{{vm.user.firstName}}</b></a></li>
+        <li><a href="#!/login">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<h2>Races</h2>
+<div ng-controller="RaceController">
+<div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message" id="dvFlash"></div>
+<table st-table="displayedCollection" st-safe-src="vm.races"  class="table table-striped">
+			<thead>
+			<tr>
+				<th st-sort="description">Description</th>
+        <th st-sort="scheduled_date">Scheduled Date</th>
+        <th st-sort="start_time">Start Time</th>
+        <th st-sort="end_time">End Time</th>
+			</tr>
+			<tr>
+				<th colspan="4"><input st-search="" class="form-control" placeholder="search ..." type="text"/></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="row in displayedCollection">
+        <td><input type="text" ng-model="row.description"/></td>
+        <td><input type="text" ng-model="row.scheduled_date"/></td>
+        <td>{{row.start_time}}</td>
+        <td>{{row.end_time}}</td>
+        <td>
+				<button type="button" ng-click="vm.UpdateRace(row)" class="btn btn-sm btn-success">
+					<i class="glyphicon glyphicon-floppy-disk">
+					</i>
+				</button>
+				</td>
+				<td>
+				<button type="button" ng-click="vm.RemoveRace(row.id)" class="btn btn-sm btn-danger">
+					<i class="glyphicon glyphicon-remove-circle">
+					</i>
+				</button>
+				</td>
+			</tr>
+			</tbody>
+      <tfooter>
+        <tr>
+          <td><input type="text" ng-model="vm.newDescription"/></td>
+          <td><input type="text" ng-model="vm.newScheduledDate"/></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>
+          <button type="button" ng-click="vm.AddRace()" class="btn btn-sm btn-success" ng-disabled="(vm.newDescription==null||vm.newDescription==='')||(vm.newScheduledDate==null||vm.newScheduledDate==='')">
+            <i class="glyphicon glyphicon-plus">
+            </i>
+          </button>
+          </td>
+        </tr>
+      </tfooter>
+		</table>
+  </div>

@@ -1,0 +1,35 @@
+﻿<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" style="color:white;"><span style='font-size:8;'>BESSIES CREEK</span> <i class="fa fa-bicycle" aria-hidden="true"></i></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       <ul class="nav navbar-nav">
+        <li ng-hide="vm.isGuest()"><a href="#!/race">Races</a></li>
+        <li ng-hide="vm.isGuest()"><a href="#!/participant">Participants</a></li>
+        <li ng-hide="vm.isGuest()"><a href="#!/race_participant">Race Participants</a></li>
+        <li ng-hide="vm.isGuest()"><a href="#!/race_manager">Race Manager</a></li>
+        <li  ng-hide="vm.isGuest()" ><a href="#!/lap_report">Lap Report</a></li>
+        <li ng-hide="vm.isGuest()"><a href="#!/race_results">Race Results</a></li>
+        <li ng-hide="!vm.isGuest()"><a href="#!/race_results_public">Race Results Public</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href=""><b>{{vm.user.firstName}}</b></a></li>
+        <li><a href="#!/login">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div align="center">
+<img src="bessies-joomla2.png" border="0" />
+</div>

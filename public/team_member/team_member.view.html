@@ -1,0 +1,91 @@
+<nav class="navbar navbar-inverse" ng-controller='TeamMemberController' >
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="#" style="color:white;"><span style='font-size:8;'>BESSIES CREEK</span> <i class="fa fa-bicycle" aria-hidden="true"></i></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="myNavbar">
+       <ul class="nav navbar-nav">
+          <li><a href="#!/race">Races</a></li>
+            <li><a href="#!/participant">Participants</a></li>
+            <li><a href="#!/team">Teams</a></li>
+            <li class="active"><a href="#!/team_member">Team Members</a></li>
+            <li><a href="#!/race_participant">Race Participants</a></li>
+            <li ><a href="#!/race_manager">Race Manager</a></li>
+            <li ><a href="#!/race_results">Race Results</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href=""><b>{{vm.user.firstName}}</b></a></li>
+        <li><a href="#!/login">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<h2>Team Members</h2>
+<div ng-controller="TeamMemberController">
+<div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message" id="dvFlash"></div>
+ 
+ <form>
+ <div class="form-group">
+    <label for="cmbRace">Race:</label>
+    <select ng-model="vm.selectedRace" 
+            ng-options="item.description for item in vm.races track by item.id"
+            ng-change="vm.GetTeams()" aria-describedby="basic-addon1" id="cmbRace">
+            </select>
+  </div>
+  <div class="form-group">
+    <label for="cmbTeam">Team:</label>
+     <select ng-model="vm.selectedTeam" 
+                ng-options="item.name for item in vm.teams track by item.id"
+                ng-change="vm.GetTeamMembers()" aria-describedby="basic-addon2" id="cmbTeam">
+      </select>
+  </div>
+ </form>
+   
+</div>
+
+
+<table st-table="displayedCollection" st-safe-src="vm.members"  class="table table-striped">
+			<thead>
+			<tr>
+        <th st-sort="name" colspan="2">Participant Name</th>
+			</tr>
+			<tr>
+				<th  colspan="2"><input st-search="" class="form-control" placeholder="search ..." type="text"/></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="row in displayedCollection">
+				<td>{{row.participant_name}}</td>
+				<td>
+				<button type="button" ng-click="vm.DeleteTeamMember(row.id)" class="btn btn-sm btn-danger">
+					<i class="glyphicon glyphicon-remove-circle">
+					</i>  
+				</button>
+				</td>       
+			</tr>
+			</tbody>
+      <tfoot>
+        <tr>
+          <td><select ng-model="vm.selectedParticipant" id="cmbParticipants">
+                <option ng-repeat="x in vm.participants" value="{{x.id}}">{{x.name}}</option>
+              </select>
+          </td>
+          <td><button type="button" value="Add" class="btn btn-sm btn-success" ng-click="vm.AddTeamMember()" ng-disabled="vm.selectedParticipant==null||vm.selectedParticipant===''">
+              <i class="glyphicon glyphicon-plus">
+					    </i>
+            </button>
+          </td>
+        </tr>
+      </tfoot>
+		</table>
+  </div>

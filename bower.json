@@ -1,0 +1,27 @@
+{
+  "name": "node-race",
+  "description": "NodeRace",
+  "main": "server.js",
+  "authors": [
+    "[object Object]"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "angular": "^1.6.1",
+    "angular-ui-router": "^0.3.2",
+    "angular-cookies": "^1.6.1",
+    "angular-bootstrap": "^2.4.0",
+    "font-awesome": "^4.7.0",
+    "angular-route": "^1.6.1"
+  }
+}

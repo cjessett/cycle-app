@@ -1,0 +1,151 @@
+<nav class="navbar navbar-inverse" ng-controller='RaceResultsController' >
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" style="color:white;"><span style='font-size:8;'>BESSIES CREEK</span> <i class="fa fa-bicycle" aria-hidden="true"></i></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       <ul class="nav navbar-nav">
+            <li ng-hide="vm.isGuest()"><a href="#!/race">Races</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/participant">Participants</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/race_participant" >Race Participants</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/race_manager" >Race Manager</a></li>
+            <li  ng-hide="vm.isGuest()" ><a href="#!/lap_report">Lap Report</a></li>
+            <li ng-hide="vm.isGuest()" class="active"><a href="#!/race_results" class="active">Race Results</a></li>
+            <li ng-hide="!vm.isGuest()"><a href="#!/race_results_public">Race Results Public</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href=""><b>{{vm.user.firstName}}</b></a></li>
+        <li><a href="#!/login">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<h2>Race Results</h2>
+
+
+<div ng-controller="RaceResultsController" id="popupContainer" ng-cloak>
+  <md-button class="md-raised" onclick="tableToExcel('tblResults','Results.xlsx');">Export Results</md-button>
+<table id="tblResults">
+  <tr ng-repeat="race in vm.races">
+    <td>
+        <table class="table table-striped" ng-repeat="gender_bike_type in race.gender_bike_types">
+            <tr ng-hide="$index > 0">
+              <td colspan="13" style='background-color:white;color:seagreen'><h3>{{race.description}} ({{vm.GetRaceStatus(race)}})</h3></td>
+            </tr>
+            <tr>
+              <td align='center' colspan="13"><h4>{{gender_bike_type}}</h4></td>
+            </tr>
+            <tr>
+               <th width="3%">Tag</th>
+                <th width="15%" wrap>Participant/Team</th>
+                <th width="5%">Gender</th>
+                <th width="2%">Age</th>
+                <th width="10%">Age Group</th>
+                <th width="10%">Bike Type</th>
+                <th width="5%">Laps</th>
+                <th width="10%">Miles</th>
+                <th width="10%">Start Time</th>
+                <th width="10%">End Time</th>
+                <th width="10%">Total Time</th>
+                <th width="4%">Place</th>
+                <th width="5%">&nbsp;</th>
+            </tr>
+            
+            <tr ng-repeat="row in vm.race_results | filter:race.description | filter:gender_bike_type:true" >
+                <td width="3%">{{row.tag}}</td>
+                <td width="15%" wrap>{{row.participant}}</td>
+                <td width="5%">{{vm.GetGender(row.gender)}}</td>
+                <td width="2%">{{row.age}}</td>
+                <td width="10%">{{row.age_group}}</td>
+                <td width="10%" wrap>{{row.bike_type}}</td>
+                <td width="5%">{{row.laps_completed}}</td>
+                <td width="10%">{{row.miles | number:2}}</td>
+                <td width="10%">{{vm.toDate(row.start_time) |  date:'ddMMMM HH:mm'}}</td>
+                <td width="10%">{{vm.toDate(row.end_time) |  date:'ddMMMM HH:mm'}}</td>
+                <td width="10%">{{row.total_time}}</td>
+                <td width="4%">{{vm.GetPlace(row,$index+1) }}</td>
+                <td valign="top" width="5%">
+                  <a ng-click="vm.OpenLapWindow(row.id,$event)" ng-show="row.laps_completed > 0">DETAILS</a>
+                </td>
+			      </tr>
+        </table>
+    </td>
+  </tr>
+</table>   
+  <div style="visibility: hidden">
+    <div class="md-dialog-container" id="myDialog">
+      <md-dialog layout-padding>
+        <md-toolbar>
+      <div class="md-toolbar-tools">
+        
+        <span flex>
+          <b>{{vm.lap.tag}}</b>:{{vm.lap.participant}}, {{vm.lap.race_name}}, {{vm.lap.gender_bike_type}}
+        </span>
+          <md-button class="md-icon-button" ng-click="vm.cancelDialog($event)">
+          <md-icon md-svg-src="close.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content> 
+      <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message" id="dvFlash"></div>
+      <table st-table="displayedCollection" st-safe-src="vm.laps"  class="table table-striped">
+            <thead>
+            <tr>
+              <th st-sort="lap_number">Lap #</th>
+              <th st-sort="start_time">Start Time</th>
+              <th st-sort="end_time">End Time</th>
+              <th st-sort="total_time">Lap Time</th>
+              <th st-sort="miles">Miles</th>
+            </tr>
+            
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in displayedCollection">
+            
+              <td>{{row.lap_number}}</td>
+              <td>{{vm.toDate(row.start_time) |  date:'ddMMMM HH:mm'}}</td>
+              <td>{{vm.toDate(row.end_time) |  date:'ddMMMM HH:mm'}}</td>
+              <td>{{row.total_time }}</td>
+              <td>{{row.miles}}</td>
+            </tr>
+
+             <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td><b>Total</b></td>
+              <td>{{vm.lap.total_time}}</td>
+              <td>{{vm.lap.miles | number:2}}</td>
+            </tr>
+
+            </tbody>
+           
+          </table>
+        </md-dialog-content> 
+      </md-dialog>
+    </div>
+  </div>
+</div>
+  
+<script>
+    var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><?xml version="1.0" encoding="UTF-8" standalone="yes"?><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+      if (!table.nodeType) table = document.getElementById(table)
+      var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+    window.location.href = uri + base64(format(template, ctx))
+  }
+})()
+</script>

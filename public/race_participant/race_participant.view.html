@@ -1,0 +1,104 @@
+﻿<nav class="navbar navbar-inverse" ng-controller='RaceParticipantController' >
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" style="color:white;"><span style='font-size:8;'>BESSIES CREEK</span> <i class="fa fa-bicycle" aria-hidden="true"></i></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       <ul class="nav navbar-nav">
+            <li ng-hide="vm.isGuest()"><a href="#!/race">Races</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/participant">Participants</a></li>
+            <li ng-hide="vm.isGuest()" class="active"><a href="#!/race_participant" class="active">Race Participants</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/race_manager">Race Manager</a></li>
+            <li ng-hide="vm.isGuest()" ><a href="#!/lap_report">Lap Report</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/race_results">Race Results</a></li>
+            <li ng-hide="!vm.isGuest()"><a href="#!/race_results_public">Race Results Public</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href=""><b>{{vm.user.firstName}}</b></a></li>
+        <li><a href="#!/login">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<h2>Race Participants</h2>
+<div ng-controller="RaceParticipantController">
+  <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message" id="dvFlash"></div>
+  
+
+    <form>
+        <div class="form-group">
+        <label for="cmbRace">Race:</label>
+        <select ng-model="vm.selectedRace" 
+              ng-options="item.description for item in vm.races track by item.id"
+              ng-change="vm.GetRaceParticipants();vm.GetTeams();" id="cmbRace">
+              </select>
+        </div>
+  </form>
+   
+</div>
+
+<table st-table="displayedCollection" st-safe-src="vm.race_participants"  class="table table-striped">
+			<thead>
+			<tr>
+                <th st-sort="participant_name">Participant/Team Name</th>
+                <!--<th st-sort="team_name">Team Name</th>-->
+                <th st-sort="bike_type">Bike Type</th>
+                <th st-sort="tag">Tag</th>
+			</tr>
+			<tr>
+				<th  colspan="3"><input st-search="" class="form-control" placeholder="search ..." type="text"/></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="row in displayedCollection">
+          <td>{{row.participant_name}}</td>
+          <!--<td>{{row.team_name}}</td>-->
+          <td>{{row.bike_type}}</td>
+          <td>{{row.tag}}</td>
+          <td>
+          <button type="button" ng-click="vm.RemoveParticipant(row.id)" class="btn btn-sm btn-danger">
+            <i class="glyphicon glyphicon-remove-circle">
+            </i>
+          </button>
+          </td>
+			</tr>
+			</tbody>
+      <tfoot>
+        <tr>
+          <td><select ng-model="vm.newParticipant" id="cmbParticipants" ng-change="vm.SetBikeType();" id="cmbParticipant">
+                <option value=''></option>
+                <option ng-repeat="x in vm.participants" value="{{x.id}}">{{x.name}}</option>
+              </select>
+          </td>
+           <!--<td><select ng-model="vm.newTeam" id="cmbTeams">
+                <option value=''></option>
+                <option ng-repeat="x in vm.teams" value="{{x.id}}">{{x.name}}</option>
+              </select>
+          </td>-->
+          <td><select name="bike_type" ng-model="vm.newBikeType">
+              <option value="Standard" ng-selected="row.bike_type=='Standard'">Standard</option>
+              <option value="Recumbent" ng-selected="row.bike_type=='Recumbent'">Recumbent</option>
+              <option value="Tandem" ng-selected="row.bike_type=='Tandem'">Tandem</option>
+              <option value="HPV" ng-selected="row.bike_type=='HPV'">HPV</option>
+              <option value="Other" ng-selected="row.bike_type=='Other'">Other</option>
+          </select>
+        </td>
+          <td><input type="text" ng-model="vm.newTag" required/></td>
+          <td><button type="button" value="Add" class="btn btn-sm btn-success" ng-click="vm.AddParticipant()" ng-disabled="((vm.newParticipant==null||vm.newParticipant==='')&&(vm.newTeam==null||vm.newTeam===''))||(vm.newTag==null||vm.newTag==='')">
+              <i class="glyphicon glyphicon-plus"></i>
+            </button>
+          </td>
+        </tr>
+      </tfoot>
+		</table>
+  </div>

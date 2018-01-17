@@ -1,0 +1,174 @@
+﻿
+<nav class="navbar navbar-inverse" ng-controller="ParticipantController">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="#" style="color:white;"><span style='font-size:8;'>BESSIES CREEK</span> <i class="fa fa-bicycle" aria-hidden="true"></i></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       <ul class="nav navbar-nav">
+        <li ng-hide="vm.isGuest()"><a href="#!/race">Races</a></li>
+        <li class="active" ng-hide="vm.isGuest()"><a href="#!/participant">Participants</a></li>
+        <li ng-hide="vm.isGuest()"><a href="#!/race_participant">Race Participants</a></li>
+        <li ng-hide="vm.isGuest()"><a href="#!/race_manager">Race Manager</a></li>
+        <li  ng-hide="vm.isGuest()" ><a href="#!/lap_report">Lap Report</a></li>
+        <li ng-hide="vm.isGuest()"><a href="#!/race_results">Race Results</a></li>
+        <li ng-hide="!vm.isGuest()"><a href="#!/race_results_public">Race Results Public</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href=""><b>{{vm.user.firstName}}</b></a></li>
+        <li><a href="#!/login">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<h2>Participants</h2>
+<div ng-controller="ParticipantController">
+<div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message" id="dvFlash"></div>
+<table st-table="displayedCollection" st-safe-src="vm.participants"  class="table table-striped">
+			<thead>
+			<tr>
+				<th st-sort="name">Name</th>
+        <th st-sort="gender">Gender</th>
+        <th st-sort="age">Age</th>
+        <th st-sort="age_group">Age Group</th>
+        <th st-sort="bike_type">Bike Type(Default)</th>
+      
+        
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+			</tr>
+			<tr>
+				<th colspan="7"><input st-search="" class="form-control" placeholder="search ..." type="text"/></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="row in displayedCollection">
+        <td><input type="text" ng-model="row.name" name="name" required/></td>
+        
+        <td><select name="gender" ng-model="row.gender">
+              <option value="F" ng-selected="row.gender=='F'">Solo Female</option>
+              <option value="M" ng-selected="row.gender=='M'">Solo Male</option>
+              <option value="TF2" ng-selected="row.gender=='TF2'">Team Female 2 Person</option>
+              <option value="TM2" ng-selected="row.gender=='TM2'">Team Male 2 Person</option>
+              <option value="TX2" ng-selected="row.gender=='TX2'">Team Mixed 2 Person</option>
+              <option value="TF4" ng-selected="row.gender=='TF4'">Team Female 4 Person</option>
+              <option value="TM4" ng-selected="row.gender=='TM4'">Team Male 4 Person</option>
+              <option value="TX4" ng-selected="row.gender=='TX4'">Team Mixed 4 Person</option>
+              <option value="TFT" ng-selected="row.gender=='TFT'">Team Female Tandem</option>
+              <option value="TMT" ng-selected="row.gender=='TMT'">Team Male Tandem</option>
+              <option value="TXT" ng-selected="row.gender=='TXT'">Team Mixed Tandem</option>
+          </select>
+        </td>
+        <td><input type="text" ng-model="row.age" name="age" required maxlength="2" size="2"/></td>
+        <td><select name="age_group" ng-model="row.age_group">
+              <option value="1" ng-selected="row.age_group=='1'">15-19</option>
+              <option value="2" ng-selected="row.age_group=='2'">20-24</option>
+              <option value="3" ng-selected="row.age_group=='3'">25-29</option>
+              <option value="4" ng-selected="row.age_group=='4'">30-34</option>
+              <option value="5" ng-selected="row.age_group=='5'">35-39</option>
+              <option value="6" ng-selected="row.age_group=='6'">40-44</option>
+              <option value="7" ng-selected="row.age_group=='7'">45-49</option>
+              <option value="8" ng-selected="row.age_group=='8'">50-54</option>
+              <option value="9" ng-selected="row.age_group=='9'">55-59</option>
+              <option value="10" ng-selected="row.age_group=='10'">60-64</option>
+              <option value="11" ng-selected="row.age_group=='11'">65-69</option>
+              <option value="12" ng-selected="row.age_group=='12'">70-74</option>
+              <option value="13" ng-selected="row.age_group=='13'">75-up</option>
+              <option value="14" ng-selected="row.age_group=='00'">00</option>
+          </select>
+        </td>
+        <td><select name="bike_type" ng-model="row.bike_type">
+              <option value="Standard" ng-selected="row.bike_type=='Standard'">Standard</option>
+              <option value="Recumbent" ng-selected="row.bike_type=='Recumbent'">Recumbent</option>
+              <option value="Tandem" ng-selected="row.bike_type=='Tandem'">Tandem</option>
+              <option value="HPV" ng-selected="row.bike_type=='HPV'">HPV</option>
+              <option value="Mixed" ng-selected="row.bike_type=='Mixed'">Mixed</option>
+              <option value="Other" ng-selected="row.bike_type=='Other'">Other</option>
+          </select>
+        </td>
+      
+
+        	<td>
+				<button type="button" ng-click="vm.UpdateParticipant(row)" class="btn btn-sm btn-success" ng-disabled="(row.name===''||row.name==null)">
+					<i class="glyphicon glyphicon-floppy-disk">
+					</i>
+				</button>
+				</td>
+				<td>
+				<button type="button" ng-click="vm.RemoveParticipant(row.id)" class="btn btn-sm btn-danger">
+					<i class="glyphicon glyphicon-remove-circle">
+					</i>
+				</button>
+				</td>
+			</tr>
+			</tbody>
+       <tfoot>
+        <tr>
+          <td><input type="text" ng-model="vm.newName" name="name" required/></td>
+          
+          <td><select name="gender" ng-model="vm.newGender">
+              <option value="F" selected>Solo Female</option>
+              <option value="M">Solo Male</option>
+              <option value="TF2">Team Female 2 Person</option>
+              <option value="TM2">Team Male 2 Person</option>
+              <option value="TX2">Team Mixed 2 Person</option>
+              <option value="TF4">Team Female 4 Person</option>
+              <option value="TM4">Team Male 4 Person</option>
+              <option value="TX4">Team Mixed 4 Person</option>
+              <option value="TFT">Team Female Tandem</option>
+              <option value="TMT">Team Male Tandem</option>
+              <option value="TXT">Team Mixed Tandem</option>
+          </select></td>
+          <td><input type="text" ng-model="vm.newAge" name="age" required maxlength="2" size="2"/></td>
+          <td><select name="age_group" ng-model="vm.newAgeGroup">
+              <option value="1" >15-19</option>
+              <option value="2" >20-24</option>
+              <option value="3" >25-29</option>
+              <option value="4" >30-34</option>
+              <option value="5" >35-39</option>
+              <option value="6" >40-44</option>
+              <option value="7" >45-49</option>
+              <option value="8" >50-54</option>
+              <option value="9" >55-59</option>
+              <option value="10">60-64</option>
+              <option value="11">65-69</option>
+              <option value="12">70-74</option>
+              <option value="13">75-up</option>
+              <option value="00">00</option>
+          </select>
+        </td>
+          <td><select name="bike_type" ng-model="vm.newBikeType">
+              <option value="Standard">Standard</option>
+              <option value="Recumbent">Recumbent</option>
+              <option value="Tandem">Tandem</option>
+              <option value="HPV">HPV</option>
+              <option value="Mixed">Mixed</option>
+              <option value="Other">Other</option>
+          </select>
+        </td>
+          <!--<td><textarea ng-model="vm.newAddress" name="address"></textarea></td>-->
+          <!--<td><input type="text" ng-model="vm.newPrimaryPhone" name="primary_phone" required size="14"/></td>
+          <td><input type="text" ng-model="vm.newAltPhone" name="alt_phone" size="14"/></td>
+          <td><input type="text" ng-model="vm.newEmail" name="email" required size="30"/></td>-->
+            <td>
+          <button type="button" ng-click="vm.AddParticipant()" class="btn btn-sm btn-success" ng-disabled="(vm.newName===''||vm.newName==null)">
+            <i class="glyphicon glyphicon-plus">
+            </i>
+          </button>
+          </td>
+          <td>&nbsp;</td>
+        </tr>
+      </tfoot>
+		</table>
+
+  </div>

@@ -1,0 +1,156 @@
+<nav class="navbar navbar-inverse" ng-controller='RaceManagerController' >
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" style="color:white;"><span style='font-size:8;'>BESSIES CREEK</span> <i class="fa fa-bicycle" aria-hidden="true"></i></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       <ul class="nav navbar-nav">
+            <li ng-hide="vm.isGuest()"><a href="#!/race">Races</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/participant">Participants</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/race_participant" >Race Participants</a></li>
+            <li ng-hide="vm.isGuest()" class="active"><a href="#!/race_manager" class="active">Race Manager</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/lap_report">Lap Report</a></li>
+            <li ng-hide="vm.isGuest()"><a href="#!/race_results">Race Results</a></li>
+            <li ng-hide="!vm.isGuest()"><a href="#!/race_results_public">Race Results Public</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href=""><b>{{vm.user.firstName}}</b></a></li>
+        <li><a href="#!/login">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->a
+  </div><!-- /.container-fluid -->
+</nav>
+<h2>Race Manager</h2>
+
+
+  <div ng-controller="RaceManagerController">
+    <div ng-class="{'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message" id="dvFlash"></div>
+    <!--<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3" ng-repeat="item in vm.races track by item.id"  style="border-color:gray;border-style:solid;border-width:1px;margin-left:2px;margin-right:2px;background-color:lightyellow" >-->
+       <table cellspacing="2" cellpadding="2" class="table">
+         <tr>
+         <td  valign="top" ng-repeat="item in vm.races track by item.id"  style="padding-left:2px;padding-right:2px;border-color:gray;border-style:solid;border-width:1px;margin-left:2px;margin-right:2px;background-color:lightyellow">
+        <h3>{{item.description}}</h3> 
+      
+      <button type="button" ng-click="vm.StartRace(item.id)" class="btn btn-sm btn-success" ng-show="!item.start_time && (vm.race_participants[vm.GetRaceKey(item.id)] && vm.race_participants[vm.GetRaceKey(item.id)].length > 0)">
+          Start Race
+      </button>
+      
+      <button type="button" ng-click="vm.StopRace(item.id)" class="btn btn-sm btn-danger" ng-show="(item.start_time && !item.end_time) && (vm.race_participants[vm.GetRaceKey(item.id)] && vm.race_participants[vm.GetRaceKey(item.id)].length > 0)">
+           Stop Race
+      </button>
+    <br/>
+        <table   cellspacing="2" cellpadding="2" class="table table-striped">
+            <tr><th align="center">Tag</th><th>&nbsp;</th><th>Laps</th><th colspan="2">Miles</th></tr>
+            <tr ng-repeat="rp in vm.race_participants[vm.GetRaceKey(item.id)]">
+              <td class="col-md-4">{{rp.tag}}</td>
+              <td class="col-md-4"> 
+                  <button type="button" ng-click="vm.EndLap(item.id,rp.id)" class="btn btn-sm btn-info" ng-show="item.start_time && !item.end_time">
+                    <i class="glyphicon glyphicon-time">
+                    </i>
+                  </button>
+              </td>
+               <td align="center" class="col-md-4">{{rp.current_lap}}</td>
+               <td align="center" class="col-md-4">{{rp.miles | number:2}}</td>
+              <td class="col-md-4"> 
+                  <a ng-click="vm.OpenLapWindow(rp.id,$event)" ng-show="rp.current_lap > 0">DETAILS</a>
+              </td>
+            </tr>
+        </table>
+         </td>
+         </tr>
+        </table>
+
+
+     <div style="visibility: hidden">
+    <div class="md-dialog-container" id="lapDialog">
+      <md-dialog layout-padding>
+        <md-toolbar>
+      <div class="md-toolbar-tools">
+       
+        <span flex>
+           <b>{{vm.lap.tag}}</b>:{{vm.lap.participant}}, {{vm.lap.race_name}}, {{vm.lap.gender_bike_type}}
+        </span>
+          <md-button class="md-icon-button" ng-click="vm.cancelDialog($event)">
+          <md-icon md-svg-src="close.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content> 
+      <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message" id="dvFlash"></div>
+      <table st-table="displayedCollection" st-safe-src="vm.laps"  class="table table-striped">
+            <thead>
+            <tr>
+              <th st-sort="lap_number">Lap #</th>
+              <th st-sort="start_time">Start Time</th>
+              <th st-sort="end_time">End Time</th>
+              <th st-sort="total_time">Lap Time</th>
+              <th st-sort="miles">Miles</th>
+            </tr>
+            
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in displayedCollection">
+              <td><input type="text" name="lap_number" ng-model="row.lap_number" required/></td>
+              <td><input type="text" name="start_time" ng-model="row.start_time" required/></td>
+              <td><input type="text" name="end_time" ng-model="row.end_time" required/></td>
+              <td>{{row.total_time}}</td>
+              <td><input type="text" name="miles" ng-model="row.miles" required/></td>
+              <td>
+                  <button type="button" ng-click="vm.UpdateLap(row)" class="btn btn-sm btn-success" ng-disabled="(row.lap_number==null||row.lap_number==='')">
+                    <i class="glyphicon glyphicon-floppy-disk">
+                    </i>
+                  </button>
+              </td>
+              <td>
+                <button type="button" ng-click="vm.RemoveLap(row.id)" class="btn btn-sm btn-danger">
+                  <i class="glyphicon glyphicon-remove-circle">
+                  </i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td><b>Total</b></td>
+              <td>{{vm.lap.total_time}}</td>
+             <td>{{vm.lap.miles | number:2}}</td>
+              <td>
+                  &nbsp;
+              </td>
+              <td>
+                &nbsp;
+              </td>
+            </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><input type="text" name="lap_number" ng-model="vm.newLapNumber" required/></td>
+                <td><input type="text" name="start_time" ng-model="vm.newStartTime" required/></td>
+                <td><input type="text" name="end_time" ng-model="vm.newEndTime" required/></td>
+                <td>&nbsp;</td>
+                <td><input type="text" name="miles" ng-model="vm.newMiles" required/></td>
+            
+                <td><button type="button" value="Add" class="btn btn-sm btn-success" ng-click="vm.AddLap()" ng-disabled="(vm.newLapNumber==null||vm.newLapNumber==='')||(vm.newStartTime==null||vm.newStartTime==='')||(vm.newEndTime==null||vm.newEndTime==='')">
+                    <i class="glyphicon glyphicon-plus"></i>
+                  </button>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </md-dialog-content> 
+      </md-dialog>
+    </div>
+  </div>
+  </div>

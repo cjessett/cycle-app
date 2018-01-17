@@ -1,0 +1,92 @@
+﻿<nav class="navbar navbar-inverse" ng-controller='TeamController' >
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="#" style="color:white;"><span style='font-size:8;'>BESSIES CREEK</span> <i class="fa fa-bicycle" aria-hidden="true"></i></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       <ul class="nav navbar-nav">
+            <li><a href="#!/race">Races</a></li>
+            <li><a href="#!/participant">Participants</a></li>
+            <li class="active"><a href="#!/team">Teams</a></li>
+            <li><a href="#!/team_member">Team Members</a></li>
+            <li><a href="#!/race_participant">Race Participants</a></li>
+             <li ><a href="#!/race_manager">Race Manager</a></li>
+             <li ><a href="#!/race_results">Race Results</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href=""><b>{{vm.user.firstName}}</b></a></li>
+        <li><a href="#!/login">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<h2>Teams</h2>
+<div ng-controller="TeamController">
+<div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message" id="dvFlash"></div>
+<table st-table="displayedCollection" st-safe-src="vm.teams"  class="table table-striped">
+			<thead>
+			<tr>
+				<th st-sort="description">Race</th>
+        <th st-sort="name">Team Name</th>
+        <th st-sort="gender" colspan="2">Gender</th>
+			</tr>
+			<tr>
+				<th colspan="4"><input st-search="" class="form-control" placeholder="search ..." type="text"/></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="row in displayedCollection">
+				<td>{{row.description}}</td>
+        <td><input type="text" name="teamName" ng-model="row.name" required/></td>
+        <td><select name="gender" ng-model="row.gender">
+              <option value="F" ng-selected="row.gender=='F'">Female</option>
+              <option value="M" ng-selected="row.gender=='M'">Male</option>
+              <option value="X" ng-selected="row.gender=='X'">Mixed</option>
+          </select>
+        </td>
+				<td>
+				<button type="button" ng-click="vm.UpdateTeam(row)" class="btn btn-sm btn-success" ng-disabled="(row.name==null||row.name==='')">
+					<i class="glyphicon glyphicon-floppy-disk">
+					</i>
+				</button>
+				</td>
+        <td>
+				<button type="button" ng-click="vm.DeleteTeam(row.id)" class="btn btn-sm btn-danger">
+					<i class="glyphicon glyphicon-remove-circle">
+					</i>
+				</button>
+				</td>
+			</tr>
+			</tbody>
+      <tfoot>
+        <tr>
+          <td><select ng-model="vm.selectedRace">
+              <option ng-repeat="x in vm.races" value="{{x.id}}">{{x.description}}</option>
+          </select>
+          </td>
+          <td><input type="text" name="name" ng-model="vm.selectedName" required/></td>
+           <td><select name="gender" ng-model="vm.selectedGender">
+              <option value="F" ng-selected="row.gender=='F'">Female</option>
+              <option value="M" ng-selected="row.gender=='M'">Male</option>
+              <option value="X" ng-selected="row.gender=='X'">Mixed</option>
+          </select>
+        </td>
+          <td><button type="button" value="Add" class="btn btn-sm btn-success" ng-click="vm.AddTeam()" ng-disabled="(vm.selectedName==null||vm.selectedName==='')||(vm.selectedRace==null||vm.selectedRace==='')">
+              <i class="glyphicon glyphicon-plus">
+					    </i>
+            </button>
+          </td>
+        </tr>
+      </tfoot>
+		</table>
+  </div>
