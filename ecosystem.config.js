@@ -15,8 +15,8 @@ module.exports = {
       key: '~/.ssh/buoyfeed.pem',
       ref: 'origin/master',
       repo: 'git@github.com:cjessett/cycle-app.git',
-      path: '/home/ubuntu/buoyfeed',
-      'post-deploy': 'yarn && yarn build && yarn pm2 startOrRestart ecosystem.config.js',
+      path: '/home/ubuntu/cycle-app',
+      'post-deploy': 'yarn && yarn pm2 startOrRestart ecosystem.config.js',
     },
   },
 }
