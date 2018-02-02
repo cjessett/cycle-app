@@ -4,7 +4,8 @@
   "description": "NodeRace",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "deploy": "pm2 deploy production ecosystem.config.js"
   },
   "author": {
     "name": "AMistry",
