@@ -11,8 +11,8 @@ module.exports = {
   deploy: {
     production: {
       user: 'ubuntu',
-      host: 'cjessett.com',
-      key: '~/.ssh/buoyfeed.pem',
+      host: 'ec2-52-14-150-104.us-east-2.compute.amazonaws.com',
+      key: '~/.ssh/air.pem',
       ref: 'origin/master',
       repo: 'git@github.com:cjessett/cycle-app.git',
       path: '/home/ubuntu/cycle-app',
