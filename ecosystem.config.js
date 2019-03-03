@@ -11,8 +11,8 @@ module.exports = {
   deploy: {
     production: {
       user: 'ubuntu',
-      host: 'ec2-18-218-103-1.us-east-2.compute.amazonaws.com',
-      key: '~/.ssh/air.pem',
+      host: '138.197.210.116',
+      key: '~/.ssh/cycle-app',
       ref: 'origin/master',
       repo: 'https://github.com/cjessett/cycle-app',
       path: '/home/ubuntu/cycle-app',
